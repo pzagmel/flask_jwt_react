@@ -95,7 +95,7 @@ def sign_up():
         db.session.add(user)
         db.session.commit()
 
-        expira = timedelta(minutes=4320)
+        expira = datetime.timedelta(minutes=4320)
         access = create_access_token(identity=user.id, expires_delta=expira)
 
         return jsonify({"msg": "Usuario registrado",
@@ -134,11 +134,29 @@ def login():
                 "token":"",
                 "status": 404}
 
+
+# La función create_access_token() se utiliza para generar el JWT.
+@app.route("/token", methods=["POST"])
+def create_token():
+    email = request.json.get("email", None)
+    password = request.json.get("password", None)
+    # Consulta la base de datos por el nombre de usuario y la contraseña
+    user = User.query.filter_by(email=email, password=password).first()
+    if (user) is None:
+          # el usuario no se encontró en la base de datos
+        return jsonify({"msg": "400 Bad Request"}), 400
+    
+    # crea un nuevo token con el id de usuario dentro
+    access_token = create_access_token(identity=user.id)
+    return jsonify({ "token": access_token, "user_id": user.id })
+   
 @app.route('/private', methods=['GET'])
 @jwt_required() #solo se ejecutará con token valido
-def privada():   
-    identidad = get_jwt_identity()
-    return identidad
+def private():   
+     current_user_id = get_jwt_identity()
+     user = User.filter.get(current_user_id)
+    
+     return jsonify({"id": user.id, "email": user.email, "status":200 })
 
 # this only runs if `$ python src/main.py` is executed
 if __name__ == '__main__':
