@@ -8,7 +8,7 @@ export const Private = () => {
 
 	return (
 		<div className="text-center mt-5">
-			<h1>Private page</h1>
+			<h1>Hello {store.user?.info_user?.email} ID {store.user?.info_user?.id}</h1>
 			
 		</div>
 	);

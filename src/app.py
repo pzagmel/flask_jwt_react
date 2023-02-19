@@ -98,10 +98,13 @@ def sign_up():
         expira = datetime.timedelta(minutes=4320)
         access = create_access_token(identity=user.id, expires_delta=expira)
 
-        return jsonify({"msg": "Usuario registrado",
-                        "token": access,
-                        "status":200
-                        })
+        data = {
+            "info_user": user.serialize(),
+            "msg": "registrado",
+            "token": access,
+            "status": 200,
+        }
+        return jsonify(data),200
 
 @app.route('/login', methods=['POST'])
 def login():
@@ -123,6 +126,7 @@ def login():
         expira = datetime.timedelta(minutes=4320)
         access = create_access_token(identity=user.serialize(), expires_delta=expira)
         data = {
+            "info_user": user.serialize(),
             "msg": "logeado",
             "token": access,
             "status": 200,
