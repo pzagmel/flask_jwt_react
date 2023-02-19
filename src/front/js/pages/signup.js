@@ -22,14 +22,14 @@ export const Signup = () => {
         <input
           type="text"
           placeholder="email" value={email}
-          onChange={() => setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
         />
       </div>
       <div>
         <input
-          type="text"
+          type="password"
           placeholder="password" value={password}
-          onChange={() => setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
         />
       </div>
       <button onClick={Handleclick}>Sign up</button> 
