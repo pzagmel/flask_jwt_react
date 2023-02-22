@@ -138,21 +138,28 @@ def login():
                 "token":"",
                 "status": 404}
 
-
-# La función create_access_token() se utiliza para generar el JWT.
-@app.route("/token", methods=["POST"])
-def create_token():
-    email = request.json.get("email", None)
-    password = request.json.get("password", None)
-    # Consulta la base de datos por el nombre de usuario y la contraseña
-    user = User.query.filter_by(email=email, password=password).first()
-    if (user) is None:
-          # el usuario no se encontró en la base de datos
-        return jsonify({"msg": "400 Bad Request"}), 400
+@app.route('/token', methods=['POST'])
+@jwt_required()
+def token_validation():
     
-    # crea un nuevo token con el id de usuario dentro
-    access_token = create_access_token(identity=user.id)
-    return jsonify({ "token": access_token, "user_id": user.id })
+    return jsonify({
+        "msg":"token valido"
+    })
+    
+# La función create_access_token() se utiliza para generar el JWT.
+# @app.route("/token", methods=["POST"])
+# def create_token():
+#     email = request.json.get("email", None)
+#     password = request.json.get("password", None)
+#     # Consulta la base de datos por el nombre de usuario y la contraseña
+#     user = User.query.filter_by(email=email, password=password).first()
+#     if (user) is None:
+#           # el usuario no se encontró en la base de datos
+#         return jsonify({"msg": "400 Bad Request"}), 400
+    
+#     # crea un nuevo token con el id de usuario dentro
+#     access_token = create_access_token(identity=user.id)
+#     return jsonify({ "token": access_token, "user_id": user.id })
    
 @app.route('/private', methods=['GET'])
 @jwt_required() #solo se ejecutará con token valido
